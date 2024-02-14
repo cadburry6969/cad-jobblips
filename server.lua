@@ -47,7 +47,7 @@ function GetBlipPerVehicle(veh)
 end
 
 AddEventHandler('playerDropped', function()
-    local cid = source
+    local cid = GetPlayerIdentifier(source)
 	if blipPlayers[cid] then
 		blipPlayers[cid] = nil
 	end
