@@ -11,6 +11,7 @@ shared_scripts {
 }
 
 client_scripts {
+    'config/config_client.lua',
     'client.lua',
 }
 

@@ -19,7 +19,11 @@ Config.Sprites = {
         -- [[You can add more jobs and change their blip colours]]
         -- ['JOB_NAME'] = BLIP_COLOUR
         ['police'] = 18,
-        ['medic'] = 35,
-        ['unemployed'] = 66
+        ['ambulance'] = 35
     }
+}
+
+Config.DutyBlipJobs = {
+    ['police'] = true,
+    ['ambulance'] = true
 }

@@ -1,5 +1,4 @@
 local jobBlips = {}
-local source = GetPlayerServerId(PlayerId())
 
 local function createDutyBlips(data)
     if not data then return end
@@ -30,11 +29,14 @@ local function removeDutyBlips()
     jobBlips = {}
 end
 
-AddStateBagChangeHandler("duty_blips", ("player:%d"):format(source), function(_, _, value)
+AddStateBagChangeHandler("duty_blips", 'global', function(_, _, value)
     removeDutyBlips()
-    if value then
+    if not value then return end
+    local job = GetPlayerJob()
+    if Config.DutyBlipJobs[job.name] and job.onduty then
+        local playerSrc = GetPlayerServerId(PlayerId())
         for _, data in pairs(value) do
-            if data.src ~= GetPlayerServerId(PlayerId()) then
+            if data.src ~= playerSrc then
                 local player = GetPlayerFromServerId(data.src)
                 createDutyBlips({ pid = player, label = data.label, job = data.job, coords = data.coords, sprite = data.sprite })
             end

@@ -15,7 +15,6 @@ local function removePlayer(source)
 	local cid = GetPlayerIdentifier(source)
 	if blipPlayers[cid] then
         blipPlayers[cid] = nil
-		Player(source).state:set('duty_blips', nil, true)
 		return cid
     end
 	return false
@@ -30,7 +29,6 @@ local function togglePlayer(source, label, job)
 	local cid = GetPlayerIdentifier(source)
 	if blipPlayers[cid] then
         blipPlayers[cid] = nil
-		Player(source).state:set('duty_blips', nil, true)
 		return cid
 	else
 		blipPlayers[cid] = { identifier = cid, src = source, label = label or 'Undefined', job = job or 'unemployed' }
@@ -67,16 +65,8 @@ CreateThread(function ()
 				local _c = GetEntityCoords(_ped)
 				local _w = GetEntityHeading(_ped)
 				_blipdata[#_blipdata+1] = { src = _data.src, label = _data.label, job = _data.job, coords = vec4(_c.x, _c.y, _c.z, _w), sprite = _sprite }
-				Player(_data.src).state:set('duty_blips', _blipdata, true)
 			end
-		end
-	end
-end)
-
-AddEventHandler('onResourceStop', function(resourceName)
-	if resourceName == GetCurrentResourceName() then
-		for _, _data in pairs(blipPlayers) do
-			Player(_data.src).state:set('duty_blips', nil, true)
+			GlobalState.duty_blips = _blipdata
 		end
 	end
 end)
