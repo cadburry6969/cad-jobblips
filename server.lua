@@ -35,7 +35,7 @@ local function togglePlayer(source, label, job)
 		return blipPlayers[cid]
     end
 end
-RegisterNetEvent('cad-jobblips:removePlayer', function(label, job)
+RegisterNetEvent('cad-jobblips:togglePlayer', function(label, job)
 	local _source = source
 	togglePlayer(_source, label, job)
 end)
@@ -58,7 +58,6 @@ CreateThread(function ()
 		Wait(Config.UpdateInterval)
 		if blipPlayers then
 			local _blipdata = {}
-			local _sources = {}
 			for _, _data in pairs(blipPlayers) do
 				local _ped = GetPlayerPed(_data.src)
 				local _veh = GetVehiclePedIsIn(_ped, false)
@@ -66,10 +65,7 @@ CreateThread(function ()
 				local _c = GetEntityCoords(_ped)
 				local _w = GetEntityHeading(_ped)
 				_blipdata[#_blipdata+1] = { src = _data.src, label = _data.label, job = _data.job, coords = vec4(_c.x, _c.y, _c.z, _w), sprite = _sprite }
-				_sources[_data.src] = true
-			end
-			for source in pairs(_sources) do
-				TriggerClientEvent('cad-jobblips:updateBlips', source, _blipdata)
+				Player(_data.src).state:set('duty_blips', _blipdata, true)
 			end
 		end
 	end

@@ -4,6 +4,7 @@ lua54 'yes'
 
 author 'Cadburry (ByteCode Studios)'
 description 'Job blips system (standalone)'
+version '1.0'
 
 shared_scripts {
     'config/config.lua',

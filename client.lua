@@ -1,6 +1,7 @@
 local jobBlips = {}
+local source = GetPlayerServerId(PlayerId())
 
-function CreateDutyBlips(data)
+local function createDutyBlips(data)
     if not data then return end
     local pid, label, job, coords, pblip = data.pid, data.label, data.job, data.coords, data.sprite
     local ped = GetPlayerPed(pid)
@@ -20,7 +21,7 @@ function CreateDutyBlips(data)
     end
 end
 
-function RemoveDutyBlips()
+local function removeDutyBlips()
     if jobBlips then
         for _, v in pairs(jobBlips) do
             RemoveBlip(v)
@@ -29,13 +30,13 @@ function RemoveDutyBlips()
     jobBlips = {}
 end
 
-RegisterNetEvent('cad-jobblips:updateBlips', function(value)
-    RemoveDutyBlips()
+AddStateBagChangeHandler("duty_blips", ("player:%d"):format(source), function(_, _, value)
+    removeDutyBlips()
     if value then
         for _, data in pairs(value) do
             if data.src ~= GetPlayerServerId(PlayerId()) then
                 local player = GetPlayerFromServerId(data.src)
-                CreateDutyBlips({ pid = player, label = data.label, job = data.job, coords = data.coords, sprite = data.sprite })
+                createDutyBlips({ pid = player, label = data.label, job = data.job, coords = data.coords, sprite = data.sprite })
             end
         end
     end
