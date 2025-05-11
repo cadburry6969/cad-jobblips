@@ -66,7 +66,7 @@ CreateThread(function ()
 				local _w = GetEntityHeading(_ped)
 				_blipdata[#_blipdata+1] = { src = _data.src, label = _data.label, job = _data.job, coords = vec4(_c.x, _c.y, _c.z, _w), sprite = _sprite }
 			end
-			GlobalState.duty_blips = _blipdata
+			TriggerClientEvent('cad-jobblips:updateBlips', -1, _blipdata)
 		end
 	end
 end)

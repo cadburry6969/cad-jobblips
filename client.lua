@@ -18,6 +18,9 @@ local function createDutyBlips(data)
         EndTextCommandSetBlipName(blip)
         jobBlips[#jobBlips+1] = blip
     end
+    if GetBlipFromEntity(PlayerPedId()) == blip then
+        RemoveBlip(blip)
+    end
 end
 
 local function removeDutyBlips()
@@ -29,17 +32,14 @@ local function removeDutyBlips()
     jobBlips = {}
 end
 
-AddStateBagChangeHandler("duty_blips", 'global', function(_, _, value)
+RegisterNetEvent('cad-jobblips:updateBlips', function(blipData)
     removeDutyBlips()
-    if not value then return end
+    if not blipData then return end
     local job = GetPlayerJob()
     if Config.DutyBlipJobs[job.name] and job.onduty then
-        local playerSrc = GetPlayerServerId(PlayerId())
         for _, data in pairs(value) do
-            if data.src ~= playerSrc then
-                local player = GetPlayerFromServerId(data.src)
-                createDutyBlips({ pid = player, label = data.label, job = data.job, coords = data.coords, sprite = data.sprite })
-            end
+            local player = GetPlayerFromServerId(data.src)
+            createDutyBlips({ pid = player, label = data.label, job = data.job, coords = data.coords, sprite = data.sprite })
         end
     end
 end)
